@@ -1,0 +1,75 @@
+﻿@using System;
+@using System.Collections.Generic;
+@using System.Net.Http;
+@using System.Net.Http.Headers;
+@using System.Text.Json
+
+@page "/weather"
+@attribute [StreamRendering]
+
+<PageTitle>Weather</PageTitle>
+
+<h1><b>Weather</b></h1>
+
+@if (weatherData?.Location != null && weatherData.Current != null)
+{
+    <br />
+    <br />
+    <h2>@weatherData.Location.Name, @weatherData.Location.Region</h2>
+
+    <h3>@weatherData.Current.Temp_C °C</h3>
+}
+else
+{
+    <p><em>Loading...</em></p>
+}
+
+
+@code {
+    private WeatherDataResponse? weatherData;
+    private RequestParameters requestParameters = new RequestParameters 
+        { 
+        URL = "http://api.weatherapi.com/v1",
+        CurrentLocation = "34.0589816899112, -117.81937062413802",
+        ApiKey = "1a055120fb9942e1939215346241811"
+        };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("OnInitializedAsync");
+        HttpClient client = new HttpClient();
+        client.BaseAddress = new Uri(requestParameters.URL);
+        
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = 
+            await client.GetAsync(requestParameters.RequestURL);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var data = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(data);
+            weatherData = JsonSerializer.Deserialize<WeatherDataResponse>(data);
+            Console.WriteLine(weatherData);
+        }
+        else
+        {
+            Console.WriteLine("Failed to get data");
+        }
+    }
+
+    private class RequestParameters
+    {
+        public required string URL { get; set; }
+        public required string CurrentLocation { get; set; }
+        public required string ApiKey { get; set; }
+
+        public string RequestURL => 
+            URL 
+            + "/current.json"
+            + "?key=" + ApiKey
+            + " &q=" + CurrentLocation
+            + "&aqi=no";
+    }
+}
