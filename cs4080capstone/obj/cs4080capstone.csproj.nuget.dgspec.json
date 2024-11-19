@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Rem\\Desktop\\4080pj\\cs4080capstone\\cs4080capstone.csproj": {}
+    "C:\\Users\\David\\Desktop\\New folder\\CS4080Capstone\\cs4080capstone\\cs4080capstone.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Rem\\Desktop\\4080pj\\cs4080capstone\\cs4080capstone.csproj": {
+    "C:\\Users\\David\\Desktop\\New folder\\CS4080Capstone\\cs4080capstone\\cs4080capstone.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Rem\\Desktop\\4080pj\\cs4080capstone\\cs4080capstone.csproj",
+        "projectUniqueName": "C:\\Users\\David\\Desktop\\New folder\\CS4080Capstone\\cs4080capstone\\cs4080capstone.csproj",
         "projectName": "cs4080capstone",
-        "projectPath": "c:\\Users\\Rem\\Desktop\\4080pj\\cs4080capstone\\cs4080capstone.csproj",
-        "packagesPath": "C:\\Users\\Rem\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Rem\\Desktop\\4080pj\\cs4080capstone\\obj\\",
+        "projectPath": "C:\\Users\\David\\Desktop\\New folder\\CS4080Capstone\\cs4080capstone\\cs4080capstone.csproj",
+        "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\David\\Desktop\\New folder\\CS4080Capstone\\cs4080capstone\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Rem\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"

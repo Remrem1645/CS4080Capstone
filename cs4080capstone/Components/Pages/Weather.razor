@@ -1,10 +1,4 @@
-﻿@using System;
-@using System.Collections.Generic;
-@using System.Net.Http;
-@using System.Net.Http.Headers;
-@using System.Text.Json
-
-@page "/weather"
+﻿@page "/weather"
 @attribute [StreamRendering]
 
 <PageTitle>Weather</PageTitle>
@@ -36,7 +30,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("OnInitializedAsync");
         HttpClient client = new HttpClient();
         client.BaseAddress = new Uri(requestParameters.URL);
         
@@ -49,9 +42,7 @@ else
         if (response.IsSuccessStatusCode)
         {
             var data = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(data);
             weatherData = JsonSerializer.Deserialize<WeatherDataResponse>(data);
-            Console.WriteLine(weatherData);
         }
         else
         {
