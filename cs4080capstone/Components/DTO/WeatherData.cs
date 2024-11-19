@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 
+// https://www.weatherapi.com/api-explorer.aspx
 namespace cs4080capstone.Components.DTO
 {
     public class WeatherDataResponse
@@ -13,17 +14,17 @@ namespace cs4080capstone.Components.DTO
 
     public class Location
     {
-        [JsonPropertyName("lat")]
-        public required double Lat { get; set; }
-        
-        [JsonPropertyName("lon")]
-        public required double Lon { get; set; }
-
         [JsonPropertyName("name")]
         public string? Name { get; set; }
         
         [JsonPropertyName("region")]
         public string? Region { get; set; }
+
+        [JsonPropertyName("lat")]
+        public double? Lat { get; set; }
+        
+        [JsonPropertyName("lon")]
+        public double? Lon { get; set; }
         
         /*
         public string? Country { get; set; }
@@ -45,7 +46,7 @@ namespace cs4080capstone.Components.DTO
         public int? Is_Day { get; set; }
 
         [JsonPropertyName("condition")]
-        public Condition? Condition { get; set; }
+        public required Condition Condition { get; set; }
 
         /*
         public long? Last_Updated_Epoch { get; set; }
@@ -72,6 +73,7 @@ namespace cs4080capstone.Components.DTO
 
     public class Condition
     {
+        [JsonPropertyName("text")]
         public string? Text { get; set; }
         /*
         public string? Icon { get; set; }
@@ -79,3 +81,58 @@ namespace cs4080capstone.Components.DTO
         */
     }
 }
+
+
+/*
+
+Example JSON Response:
+
+{
+    "location": {
+        "name": "Diamond Bar",
+        "region": "California",
+        "country": "United States of America",
+        "lat": 34.029,
+        "lon": -117.809,
+        "tz_id": "America/Los_Angeles",
+        "localtime_epoch": 1731982576,
+        "localtime": "2024-11-18 18:16"
+    },
+    "current": {
+        "last_updated_epoch": 1731982500,
+        "last_updated": "2024-11-18 18:15",
+        "temp_c": 13.3,
+        "temp_f": 55.9,
+        "is_day": 0,
+        "condition": {
+            "text": "Partly cloudy",
+            "icon": "//cdn.weatherapi.com/weather/64x64/night/116.png",
+            "code": 1003
+        },
+        "wind_mph": 6.3,
+        "wind_kph": 10.1,
+        "wind_degree": 223,
+        "wind_dir": "SW",
+        "pressure_mb": 1015.0,
+        "pressure_in": 29.96,
+        "precip_mm": 0.0,
+        "precip_in": 0.0,
+        "humidity": 77,
+        "cloud": 75,
+        "feelslike_c": 12.6,
+        "feelslike_f": 54.6,
+        "windchill_c": 14.0,
+        "windchill_f": 57.2,
+        "heatindex_c": 14.6,
+        "heatindex_f": 58.2,
+        "dewpoint_c": 6.9,
+        "dewpoint_f": 44.4,
+        "vis_km": 16.0,
+        "vis_miles": 9.0,
+        "uv": 0.0,
+        "gust_mph": 9.2,
+        "gust_kph": 14.8
+    }
+}
+
+*/
