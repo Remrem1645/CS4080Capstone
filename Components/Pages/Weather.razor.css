@@ -1,0 +1,19 @@
+.temperature-div {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+}
+
+.temperature {
+    display: inline-block;
+}
+
+.swap-svg {
+    margin: 0 10px;
+    width: 2rem;
+    height: 2rem;
+}
+
+.swap-svg:hover {
+    cursor: pointer;
+}
