@@ -25,17 +25,30 @@ namespace cs4080capstone.Components.DTO
         
         [JsonPropertyName("lon")]
         public double? Lon { get; set; }
+
+        [JsonPropertyName("localtime")]
+        public string? Localtime { get; set; }
+
+        public string? FormattedTime => string.IsNullOrEmpty(Localtime)
+            ? null
+            : DateTime.ParseExact(Localtime, "yyyy-MM-dd HH:mm", null).ToString("hh:mm tt");
         
         /*
         public string? Country { get; set; }
         public string? Tz_Id { get; set; }
         public long? Localtime_Epoch { get; set; }
-        public string? Localtime { get; set; }
         */
     }
 
     public class Current
     {
+        [JsonPropertyName("last_updated")]
+        public string? Last_Updated { get; set; }
+
+        public string? FormattedLast_Updated => string.IsNullOrEmpty(Last_Updated)
+            ? null
+            : DateTime.ParseExact(Last_Updated, "yyyy-MM-dd HH:mm", null).ToString("MMMM dd, yyyy 'at' hh:mm tt");
+
         [JsonPropertyName("temp_c")]
         public double? Temp_C { get; set; }
         
@@ -47,20 +60,27 @@ namespace cs4080capstone.Components.DTO
 
         [JsonPropertyName("condition")]
         public required Condition Condition { get; set; }
+        
+        [JsonPropertyName("wind_mph")]
+        public double? Wind_Mph { get; set; }
+
+        [JsonPropertyName("wind_dir")]
+        public string? Wind_Dir { get; set; }
+
+        [JsonPropertyName("cloud")]
+        public int? Cloud { get; set; }
+
+        [JsonPropertyName("humidity")]
+        public int? Humidity { get; set; }
 
         /*
         public long? Last_Updated_Epoch { get; set; }
-        public string? Last_Updated { get; set; }
-        public double? Wind_Mph { get; set; }
         public double? Wind_Kph { get; set; }
         public int? Wind_Degree { get; set; }
-        public string? Wind_Dir { get; set; }
         public double? Pressure_Mb { get; set; }
         public double? Pressure_In { get; set; }
         public double? Precip_Mm { get; set; }
         public double? Precip_In { get; set; }
-        public int? Humidity { get; set; }
-        public int? Cloud { get; set; }
         public double? Feelslike_C { get; set; }
         public double? Feelslike_F { get; set; }
         public double? Vis_Km { get; set; }

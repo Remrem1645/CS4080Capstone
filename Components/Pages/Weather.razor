@@ -1,4 +1,5 @@
 ﻿@page "/weather"
+@rendermode InteractiveServer
 @attribute [StreamRendering]
 
 <PageTitle>Weather</PageTitle>
@@ -7,16 +8,25 @@
 
 @if (weatherData?.Location != null && weatherData.Current != null)
 {
-    <br />
-    <br />
-    <h2>@weatherData.Location.Name, @weatherData.Location.Region</h2>
-
-    <h3>@weatherData.Current.Temp_C °C</h3>
+    <h2>@weatherData.Location.Name, @weatherData.Location.Region (@weatherData.Location.FormattedTime)</h2>
+    <h3><i>@weatherData.Current.Condition.Text</i></h3>
+    <div class="temperature-div">
+        <h3 class="temperature">@(showF ? weatherData.Current.Temp_F : weatherData.Current.Temp_C) °@(showF ? "F": "C")</h3>
+        <svg @onclick="SwapTemp" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="swap-svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
+        </svg>
+    </div>
+    <h3>Clouds: @weatherData.Current.Cloud%</h3>
+    <h3>Humidity: @weatherData.Current.Humidity%</h3>
+    <h3>Wind: @weatherData.Current.Wind_Mph MPH, @weatherData.Current.Wind_Dir</h3>
+    <h6>Last Updated: @weatherData.Current.FormattedLast_Updated</h6>
 }
 else
 {
     <p><em>Loading...</em></p>
 }
+
+<button @onclick="RefreshWeather">Refresh Data</button>
 
 
 @code {
@@ -25,26 +35,30 @@ else
         { 
         URL = "http://api.weatherapi.com/v1",
         CurrentLocation = "34.0589816899112, -117.81937062413802",
-        ApiKey = ""
         };
 
+    private HttpClient? client;
     protected override async Task OnInitializedAsync()
     {
         // Make sure to set the API key in the appsettings.json file and appsettings.Development.json file
         requestParameters.ApiKey = Configuration["WeatherApiKey"] ?? 
             throw new InvalidOperationException("API key not configured.");
 
-        HttpClient client = new HttpClient();
-        client.BaseAddress = new Uri(requestParameters.URL);
-        
+        client = new HttpClient{BaseAddress = new Uri(requestParameters.URL)};
         client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
+        await RefreshWeather();
+    }
+
+    private async Task RefreshWeather() {
+        if (client == null) return;
 
         HttpResponseMessage response = 
             await client.GetAsync(requestParameters.RequestURL);
 
         if (response.IsSuccessStatusCode)
         {
+            Console.WriteLine("Retrieved data");
             var data = await response.Content.ReadAsStringAsync();
             weatherData = JsonSerializer.Deserialize<WeatherDataResponse>(data);
         }
@@ -53,6 +67,13 @@ else
             Console.WriteLine("Failed to get data");
         }
     }
+
+    private bool showF = true;
+    private void SwapTemp() {
+        Console.WriteLine("clicked");
+        showF = !showF;
+    }
+
 
     private class RequestParameters
     {
