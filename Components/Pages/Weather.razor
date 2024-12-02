@@ -1,6 +1,7 @@
 ﻿@page "/weather"
 @rendermode InteractiveServer
 @attribute [StreamRendering]
+@inject IJSRuntime JS
 
 <PageTitle>Weather</PageTitle>
 
@@ -28,18 +29,28 @@ else
 
 <button @onclick="RefreshWeather">Refresh Data</button>
 
+<script>
+    window.getCoords = async () => {
+        const pos = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+        return pos.coords.latitude + ', ' + pos.coords.longitudes
+    };
+</script>
 
 @code {
     private WeatherDataResponse? weatherData;
+    @* private Program? program = new Program(); *@
     private RequestParameters requestParameters = new RequestParameters 
         { 
         URL = "http://api.weatherapi.com/v1",
-        CurrentLocation = "34.0589816899112, -117.81937062413802",
+        CurrentLocation = "0, 0",
         };
 
     private HttpClient? client;
     protected override async Task OnInitializedAsync()
     {
+        @* requestParameters.CurrentLocation = geoLocation; *@
         // Make sure to set the API key in the appsettings.json file and appsettings.Development.json file
         requestParameters.ApiKey = Configuration["WeatherApiKey"] ?? 
             throw new InvalidOperationException("API key not configured.");
@@ -47,7 +58,25 @@ else
         client = new HttpClient{BaseAddress = new Uri(requestParameters.URL)};
         client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
-        await RefreshWeather();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await base.OnInitializedAsync();
+            var geoLocation = await GetLocation();
+            Console.WriteLine(geoLocation);
+            requestParameters.CurrentLocation = geoLocation;
+
+            await RefreshWeather();
+            StateHasChanged();
+        }
+    }
+
+    private async Task<string> GetLocation()
+    {
+        return await JS.InvokeAsync<string>("getCoords");
     }
 
     private async Task RefreshWeather() {
