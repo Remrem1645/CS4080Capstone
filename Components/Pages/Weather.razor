@@ -30,13 +30,11 @@ else
 <button @onclick="RefreshWeather">Refresh Data</button>
 
 <script>
-
     window.getCoords = async () => {
         const pos = await new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject);
         });
-        return pos.coords.latitude + ', ' + pos.coords.longitude
-
+        return pos.coords.latitude + ', ' + pos.coords.longitudes
     };
 </script>
 
@@ -60,28 +58,26 @@ else
         client = new HttpClient{BaseAddress = new Uri(requestParameters.URL)};
         client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
-
-        @* await RefreshWeather(); *@
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
-{
-    if (firstRender)
     {
-        await base.OnInitializedAsync();
-        var geoLocation = await GetLocation();
-        Console.WriteLine(geoLocation);
-        requestParameters.CurrentLocation = geoLocation;
+        if (firstRender)
+        {
+            await base.OnInitializedAsync();
+            var geoLocation = await GetLocation();
+            Console.WriteLine(geoLocation);
+            requestParameters.CurrentLocation = geoLocation;
 
-     await RefreshWeather();
-        StateHasChanged();
+            await RefreshWeather();
+            StateHasChanged();
+        }
     }
-}
 
     private async Task<string> GetLocation()
-{
-    return await JS.InvokeAsync<string>("getCoords");
-}
+    {
+        return await JS.InvokeAsync<string>("getCoords");
+    }
 
     private async Task RefreshWeather() {
         if (client == null) return;
