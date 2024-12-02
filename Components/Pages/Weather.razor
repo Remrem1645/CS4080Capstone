@@ -1,4 +1,4 @@
-﻿@page "/weather"
+﻿@page "/"
 @rendermode InteractiveServer
 @attribute [StreamRendering]
 @inject IJSRuntime JS
@@ -33,10 +33,7 @@
         </div>
         <h2 class="text-xl">@weatherData.Location.Name, @weatherData.Location.Region (@weatherData.Location.FormattedTime)</h2>
         <h2 class="text-xl"><i>@weatherData.Current.Condition.Text</i></h2>
-
-        <h2 class="text-sm">
-            Last Updated: @weatherData.Current.FormattedLast_Updated
-        </h2>
+        <h2 class="text-sm">Last Updated: @weatherData.Current.FormattedLast_Updated</h2>
     </section>
 
     <section class="columns-3 mt-5 gap-2 mx-10 h-full">
@@ -108,7 +105,7 @@ else
         const pos = await new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject);
         });
-        return pos.coords.latitude + ', ' + pos.coords.longitudes
+        return pos.coords.latitude + ', ' + pos.coords.longitude
     };
 </script>
 
